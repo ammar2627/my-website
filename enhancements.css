@@ -1,0 +1,66 @@
+
+/* All enhancements are scoped to .enhanced to avoid collisions */
+.enhanced .btn-theme{
+  margin-left: 10px;
+  padding: 6px 10px;
+  border: 1px solid rgba(0,0,0,0.2);
+  background: rgba(255,255,255,0.8);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.enhanced .btn-theme:active { transform: translateY(1px); }
+
+/* Suggestions dropdown */
+.enhanced .navbar-search{ position: relative; }
+.enhanced #suggestions{
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  display: none;
+  max-height: 220px;
+  overflow-y: auto;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  z-index: 999;
+}
+.enhanced #suggestions .sugg-item{
+  padding: 8px 10px;
+  font-size: 14px;
+}
+.enhanced #suggestions .sugg-item:hover,
+.enhanced #suggestions .sugg-item:focus{
+  background: #f2f2f2;
+  outline: none;
+}
+
+/* Gentle heading fade-in without affecting other elements */
+.enhanced header h1{
+  animation: enhancedFadeIn 1.2s ease-in;
+}
+@keyframes enhancedFadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Optional dark mode (minimal visual changes to avoid conflicts) */
+.enhanced.dark-mode{
+  color-scheme: dark;
+}
+.enhanced.dark-mode, 
+.enhanced.dark-mode h1, 
+.enhanced.dark-mode p, 
+.enhanced.dark-mode a{
+  color: #eaeaea;
+}
+.enhanced.dark-mode a { text-decoration-color: rgba(255,255,255,0.5); }
+.enhanced.dark-mode #suggestions{
+  background: #222;
+  border-color: #444;
+}
+.enhanced.dark-mode #suggestions .sugg-item:hover,
+.enhanced.dark-mode #suggestions .sugg-item:focus{
+  background: #333;
+}
