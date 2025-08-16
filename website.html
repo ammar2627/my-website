@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<link href="website.css" rel="stylesheet"/>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Website</title>
+<style>
+        body {
+            background-image: url('pexels-fwstudio-33348-164005.jpg');
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-position: center center;
+        }
+    </style>
+<link href="enhancements.css" rel="stylesheet"/></head>
+<body class="enhanced">
+<nav>
+<div class="navbar-container">
+<ul>
+<li><a href="#">Home</a></li>
+<li><a href="#">About</a></li>
+<li><a href="#">Contact</a></li>
+</ul>
+<form action="find" class="navbar-search" id="searchForm" method="get">
+<input id="searchInput" name="query" placeholder="Search..." required="" type="text"/><div aria-label="Search suggestions" id="suggestions" role="listbox"></div>
+<button type="submit">Search</button>
+</form>
+<button class="btn-theme" id="themeToggle">Toggle Theme</button></div>
+</nav>
+<header>
+<h1>Welcome to my webpage</h1>
+</header>
+<div id="searchResult"></div>
+<script>
+        const form = document.getElementById('searchForm');
+        const input = document.getElementById('searchInput');
+        const result = document.getElementById('searchResult');
+
+        // Map of site names to URLs
+        const siteMap = {
+            "youtube": "https://www.youtube.com",
+            "google": "https://www.google.com",
+            "facebook": "https://www.facebook.com",
+            "twitter": "https://www.twitter.com",
+            "instagram": "https://www.instagram.com",
+            // Add more sites as needed
+        };
+
+        // Sample data to search from
+        const data = [
+            "Home",
+            "About",
+            "Contact",
+            "Welcome to my webpage",
+            "Search feature",
+            "Profile",
+            "Services",
+            "Blog"
+        ];
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const query = input.value.trim().toLowerCase();
+
+            // Check if query matches a site in siteMap
+            if (siteMap[query]) {
+                window.open(siteMap[query], "_blank");
+                result.textContent = `Opening ${query}...`;
+                return;
+            }
+
+            // Otherwise, search local data
+            const matches = data.filter(item => item.toLowerCase().includes(query));
+            if (matches.length > 0) {
+                result.innerHTML = "<strong>Results:</strong><ul>" + matches.map(item => `<li>${item}</li>`).join('') + "</ul>";
+            } else {
+                result.textContent = "No results found.";
+            }
+        });
+    
+/* === Enhancements (scoped) === */
+(function(){
+  // Greeting based on time
+  try {
+    const h1 = document.querySelector("header h1");
+    if (h1) {
+      const hours = new Date().getHours();
+      let greeting = "Welcome";
+      if (hours < 12) greeting = "Good morning";
+      else if (hours < 18) greeting = "Good afternoon";
+      else greeting = "Good evening";
+      h1.textContent = greeting + ", welcome to my webpage!";
+    }
+  } catch(e){}
+
+  // Theme toggle (class-based, scoped to .enhanced)
+  try {
+    const toggle = document.getElementById("themeToggle");
+    if (toggle) {
+      toggle.addEventListener("click", () => {
+        document.body.classList.toggle("dark-mode");
+      });
+    }
+  } catch(e){}
+
+  // Live search suggestions (uses existing 'data' array and #searchInput)
+  try {
+    const input = document.getElementById("searchInput");
+    const suggestions = document.getElementById("suggestions");
+    if (input && suggestions && Array.isArray(window.data)) {
+      const show = (items) => {
+        suggestions.innerHTML = items.map(item => (
+          `<div class="sugg-item" role="option" tabindex="0">${item}</div>`
+        )).join("");
+        suggestions.style.display = items.length ? "block" : "none";
+        // Click / keyboard select
+        Array.from(suggestions.children).forEach(el => {
+          el.addEventListener("click", () => { input.value = el.textContent; suggestions.style.display="none"; });
+          el.addEventListener("keydown", (ev) => {
+            if (ev.key === "Enter") { input.value = el.textContent; suggestions.style.display="none"; }
+          });
+        });
+      };
+
+      input.addEventListener("input", () => {
+        const q = input.value.trim().toLowerCase();
+        if (!q) { suggestions.style.display = "none"; return; }
+        const matches = window.data.filter(d => d.toLowerCase().includes(q));
+        show(matches.slice(0, 8));
+      });
+
+      input.addEventListener("blur", () => setTimeout(()=> suggestions.style.display="none", 150));
+      input.addEventListener("focus", () => { if (suggestions.innerHTML.trim()) suggestions.style.display="block"; });
+    }
+  } catch(e){}
+})();
+</script>
+</body>
+</html>
